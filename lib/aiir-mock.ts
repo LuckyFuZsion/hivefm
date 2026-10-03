@@ -3,7 +3,7 @@ import { findCurrentSlot, schedule } from '@/lib/schedule'
 import { SITE, STREAM } from '@/lib/site'
 import { londonNow, toMinutes } from '@/lib/time'
 
-const logo = SITE.logo
+const logo = SITE.badge
 
 /** Fallback shown if the live socket cannot be reached, so the UI never looks broken. */
 export function createMockNowPlaying(now: Date = new Date()): NowPlayingMessage {

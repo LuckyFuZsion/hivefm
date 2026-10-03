@@ -10,8 +10,8 @@ interface SafeImageProps {
   fallback?: string
 }
 
-/** Image that falls back to the Hive FM logo if the source fails or is empty. */
-export function SafeImage({ src, alt, className, fallback = SITE.logo }: SafeImageProps) {
+/** Image that falls back to the Hive FM badge if the source fails or is empty. */
+export function SafeImage({ src, alt, className, fallback = SITE.badge }: SafeImageProps) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null)
   const resolved = src && src !== failedSrc ? src : fallback
   return (

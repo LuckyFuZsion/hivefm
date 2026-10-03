@@ -37,11 +37,11 @@ export function Header() {
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href))
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
+    <header className="on-dark sticky top-0 z-40 border-b-2 border-primary/40 bg-foreground/95 text-background backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" aria-label="Hive FM home" className="flex shrink-0 items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={SITE.logo} alt="97.2 Hive FM" className="h-14 w-auto" />
+          <img src={SITE.badge} alt="97.2 Hive FM" className="size-16" />
         </Link>
 
         <nav aria-label="Main" className="hidden xl:block">
@@ -52,8 +52,8 @@ export function Header() {
                   href={link.href}
                   aria-current={isActive(link.href) ? 'page' : undefined}
                   className={cn(
-                    'inline-flex min-h-11 items-center rounded-full px-4 text-base font-semibold hover:bg-secondary',
-                    isActive(link.href) && 'bg-primary text-primary-foreground hover:bg-primary',
+                    'inline-flex min-h-11 items-center rounded-full px-4 text-base font-semibold hover:bg-background/10 hover:text-primary focus-visible:outline-primary',
+                    isActive(link.href) && 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
                   )}
                 >
                   {link.label}
@@ -64,7 +64,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ListenLiveButton className="hidden sm:inline-flex" />
+          <ListenLiveButton className="hidden focus-visible:outline-primary sm:inline-flex" />
           <button
             ref={menuButtonRef}
             type="button"
@@ -72,7 +72,7 @@ export function Header() {
             aria-label="Open menu"
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="flex size-12 items-center justify-center rounded-full border-2 border-foreground xl:hidden"
+            className="flex size-12 items-center justify-center rounded-full border-2 border-background hover:border-primary hover:text-primary focus-visible:outline-primary xl:hidden"
           >
             <Menu className="size-6" aria-hidden="true" />
           </button>

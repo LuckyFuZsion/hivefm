@@ -15,48 +15,117 @@ export interface ScheduleSlot {
   image: string
 }
 
-const img = SITE.logo
+const img = SITE.badge
 
-const weekday = (day: DayIndex): ScheduleSlot[] => [
-  { day, start: '00:00', end: '07:00', showName: 'The Overnight Mix', image: img },
-  { day, start: '07:00', end: '09:00', showName: 'Rise & Shine with Suzie Sparkles', presenterSlug: 'suzie-sparkles', image: img },
-  { day, start: '09:00', end: '12:00', showName: 'The Goldmine with Willie Mac', presenterSlug: 'willie-mac', image: img },
-  { day, start: '12:00', end: '15:00', showName: 'The Lunch Hive with Guy Jogoo', presenterSlug: 'guy-jogoo', image: img },
-  { day, start: '15:00', end: '18:00', showName: 'Drivetime with Ian Thacker', presenterSlug: 'ian-thacker', image: img },
-  { day, start: '18:00', end: '24:00', showName: 'Hive FM Evenings', image: img },
-]
+type Row = [start: string, showName: string, presenterSlug?: string]
 
-const saturday: ScheduleSlot[] = [
-  { day: 5, start: '02:00', end: '06:00', showName: 'The Overnight Mix', image: img },
-  { day: 5, start: '06:00', end: '10:00', showName: 'James Dale at Breakfast', presenterSlug: 'james-dale', image: img },
-  { day: 5, start: '10:00', end: '12:00', showName: 'Tunes at Ten With Andy Antony', presenterSlug: 'andy-antony', image: img },
-  { day: 5, start: '12:00', end: '14:00', showName: "Ela's Saturday Shout With Ela Watts", presenterSlug: 'ela-watts', image: img },
-  { day: 5, start: '14:00', end: '17:00', showName: 'The Buzz with Alastair Hawken', presenterSlug: 'alastair-hawken', image: img },
-  { day: 5, start: '17:00', end: '19:00', showName: "Mr G's Time Travel Groove with Paul Green", presenterSlug: 'paul-green', image: img },
-  { day: 5, start: '19:00', end: '22:00', showName: 'Love your Saturday Night Dancefloor with Elvis Stooke', presenterSlug: 'elvis-stooke', image: img },
-  { day: 5, start: '22:00', end: '24:00', showName: 'Classic Floor Fillers With Andy McCall', presenterSlug: 'andy-mccall', image: img },
-]
+/** Builds a day's slots from start times; each slot ends when the next one begins. */
+const day = (d: DayIndex, rows: Row[]): ScheduleSlot[] =>
+  rows.map(([start, showName, presenterSlug], i) => ({
+    day: d,
+    start,
+    end: rows[i + 1]?.[0] ?? '24:00',
+    showName,
+    presenterSlug,
+    image: img,
+  }))
 
-const sunday: ScheduleSlot[] = [
-  { day: 6, start: '00:00', end: '08:00', showName: 'The Overnight Mix', image: img },
-  { day: 6, start: '08:00', end: '24:00', showName: 'The Sunday Hive', image: img },
-]
-
-// Saturday is real data. Other days are placeholders until the full rota is confirmed.
+/**
+ * Snapshot of the real weekly rota, copied from Aiir's schedule for 3-9 Oct 2026.
+ * Used as the fallback if the live schedule can't be fetched (see lib/schedule-live.ts).
+ * 0 = Monday ... 6 = Sunday.
+ */
 export const schedule: ScheduleSlot[] = [
-  ...weekday(0),
-  ...weekday(1),
-  ...weekday(2),
-  ...weekday(3),
-  ...weekday(4),
-  ...saturday,
-  ...sunday,
+  // Monday
+  ...day(0, [
+    ["00:00", "The Overnight Mix"],
+    ["06:00", "Early Risers With Harry Chapman", "harry-chapman"],
+    ["07:00", "James Dale at Breakfast", "james-dale"],
+    ["09:00", "Goldmine at Nine with Ady Crampton", "ady-crampton"],
+    ["10:00", "The Mid Morning Show with Paul Green", "paul-green"],
+    ["12:00", "The Lunch Hive with Guy Jogoo", "guy-jogoo"],
+    ["15:00", "Drivetime with Ian Thacker", "ian-thacker"],
+    ["18:00", "Soul & Motown SpectacuLAR With Vince Frank", "vince-frank"],
+    ["20:00", "Monday Night Jazz with Andy Antony", "andy-antony"],
+    ["22:00", "Love From Tony With Tony Lloyd"],
+  ]),
+  // Tuesday
+  ...day(1, [
+    ["00:00", "The Overnight Mix"],
+    ["06:00", "Early Risers With Harry Chapman", "harry-chapman"],
+    ["07:00", "Rise & Shine with Suzie Sparkles", "suzie-sparkles"],
+    ["09:00", "Goldmine at Nine with Ady Crampton", "ady-crampton"],
+    ["10:00", "The Tartan Tonic With Willie Mac", "willie-mac"],
+    ["12:00", "The Lunch Hive with Guy Jogoo", "guy-jogoo"],
+    ["15:00", "Drivetime with Ian Thacker", "ian-thacker"],
+    ["18:00", "The Shaun James Music Lounge", "shaun-james"],
+    ["20:00", "Alternative Indie With David Barnett", "david-barnett"],
+    ["22:00", "The Workday Wind Down"],
+  ]),
+  // Wednesday
+  ...day(2, [
+    ["00:00", "The Overnight Mix"],
+    ["06:00", "Early Risers With Harry Chapman", "harry-chapman"],
+    ["07:00", "James Dale at Breakfast", "james-dale"],
+    ["09:00", "Goldmine at Nine with Ady Crampton", "ady-crampton"],
+    ["10:00", "The Tartan Tonic With Willie Mac", "willie-mac"],
+    ["12:00", "The Lunch Hive with Guy Jogoo", "guy-jogoo"],
+    ["15:00", "Drivetime with Ian Thacker", "ian-thacker"],
+    ["18:00", "The PM Show with Paul O’ Reilly", "paul-o-reilly"],
+    ["20:00", "The 80's Roll Back With Guy Jogoo", "guy-jogoo"],
+    ["22:00", "That 90's & 00's Show With Mick Hall", "mick-hall"],
+  ]),
+  // Thursday
+  ...day(3, [
+    ["00:00", "The Overnight Mix"],
+    ["06:00", "Early Risers With Harry Chapman", "harry-chapman"],
+    ["07:00", "Rise & Shine with Suzie Sparkles", "suzie-sparkles"],
+    ["09:00", "Goldmine at Nine with Ady Crampton", "ady-crampton"],
+    ["10:00", "The Tartan Tonic with Ashley Coulson", "ashley-coulson"],
+    ["12:00", "The Lunch Hive with Guy Jogoo", "guy-jogoo"],
+    ["15:00", "Drivetime with Ian Thacker", "ian-thacker"],
+    ["18:00", "Church on Thursday With Roger Church", "roger-church"],
+    ["20:00", "What a Wonderful World by Lia Vox"],
+    ["22:00", "Ready For The Weekend With Lee Everest", "lee-everest"],
+    ["23:00", "The Workday Wind Down"],
+  ]),
+  // Friday
+  ...day(4, [
+    ["00:00", "The Overnight Mix"],
+    ["06:00", "Early Risers With Harry Chapman", "harry-chapman"],
+    ["07:00", "Rise & Shine with Suzie Sparkles", "suzie-sparkles"],
+    ["09:00", "Goldmine at Nine with Ady Crampton", "ady-crampton"],
+    ["10:00", "The Mid Morning Show With James Dale", "james-dale"],
+    ["12:00", "The Lunch Hive with Guy Jogoo", "guy-jogoo"],
+    ["15:00", "Drivetime with Ian Thacker", "ian-thacker"],
+    ["18:00", "The Gingerbread Man With The Weekend Warm Up", "the-gingerbread-man"],
+    ["20:00", "Friday Night Fun With Nev Eaglen", "nev-eaglen"],
+    ["23:00", "Lee Everest With Dance Party weekly", "lee-everest"],
+  ]),
+  // Saturday
+  ...day(5, [
+    ["02:00", "The Overnight Mix"],
+    ["06:00", "James Dale at Breakfast", "james-dale"],
+    ["10:00", "Tunes at Ten With Andy Antony", "andy-antony"],
+    ["12:00", "Ela's Saturday Shout With Ela Watts", "ela-watts"],
+    ["14:00", "The Buzz with Alastair Hawken", "alastair-hawken"],
+    ["17:00", "Mr G’s Time Travel Groove with Paul Green", "paul-green"],
+    ["19:00", "Love your Saturday Night Dancefloor with Elvis Stooke", "elvis-stooke"],
+    ["22:00", "Classic Floor Fillers With Andy McCall", "andy-mccall"],
+  ]),
+  // Sunday
+  ...day(6, [
+    ["00:00", "The Overnight Mix"],
+    ["06:00", "James Dale at Breakfast", "james-dale"],
+    ["10:00", "The Sunday Special with Harry Chapman", "harry-chapman"],
+    ["13:00", "Ian Smith With One's at One", "ian-smith"],
+    ["14:00", "The Sunday Jukebox With Mark Roberts", "mark-roberts"],
+    ["17:00", "Rock Of Ages: The Radio Show With Steve Healey", "steve-healey"],
+    ["19:00", "Rob Jackson With Country Vibes", "rob-jackson"],
+    ["21:00", "Ady Crampton With The 70's Soul Show", "ady-crampton"],
+    ["23:00", "The Weekend Wind Down"],
+  ]),
 ]
-
-/** Swap the body for an API fetch later; callers already await it. */
-export async function getSchedule(): Promise<ScheduleSlot[]> {
-  return schedule
-}
 
 export function slotsForDay(slots: ScheduleSlot[], day: number): ScheduleSlot[] {
   return slots

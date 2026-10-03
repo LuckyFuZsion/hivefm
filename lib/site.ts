@@ -6,8 +6,11 @@ export const SITE = {
   frequency: '97.2 FM',
   charityNumber: '1182486',
   venue: 'BHive Community Centre',
+  street: '11a Finkin Street',
   town: 'Grantham',
   county: 'Lincolnshire',
+  postcode: 'NG31 6QZ',
+  geo: { lat: 52.912581, lng: -0.641009 },
   studioPhone: '01476 347344',
   studioPhoneIntl: '+441476347344',
   officePhone: '01476 347345',
@@ -19,6 +22,8 @@ export const SITE = {
   appStore: 'https://apps.apple.com/us/app/hive-fm/id6742198007',
   blindSociety: 'https://www.blind-society.org.uk/',
   logo: '/hive-fm-logo.png',
+  /** Square bee badge for small spaces where the full logo would be too small to read */
+  badge: '/images/hive-fm-badge.png',
   onDemandBase: 'https://player.aiir.com/hive-fm/on-demand/',
 } as const
 

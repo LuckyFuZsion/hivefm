@@ -6,7 +6,7 @@ import { usePlayer } from '@/components/player/player-provider'
 import { SITE } from '@/lib/site'
 
 function absolute(url: string | undefined): string {
-  const value = url || SITE.logo
+  const value = url || SITE.badge
   if (typeof window === 'undefined') return value
   return new URL(value, window.location.origin).toString()
 }

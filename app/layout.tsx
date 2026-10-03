@@ -17,15 +17,63 @@ const poppins = Poppins({
   variable: '--font-poppins',
 })
 
+const DESCRIPTION =
+  "Hive FM 97.2 is Grantham's community radio station, broadcasting from the BHive. Listen live, browse the schedule, meet our presenters and catch up on shows."
+
+const radioStationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'RadioStation',
+  name: SITE.name,
+  alternateName: SITE.shortName,
+  slogan: 'Bringing Grantham Together',
+  description: DESCRIPTION,
+  url: SITE.url,
+  logo: new URL(SITE.badge, SITE.url).toString(),
+  image: new URL(SITE.badge, SITE.url).toString(),
+  telephone: SITE.officePhone,
+  email: SITE.officeEmail,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${SITE.venue}, ${SITE.street}`,
+    addressLocality: SITE.town,
+    addressRegion: SITE.county,
+    postalCode: SITE.postcode,
+    addressCountry: 'GB',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: SITE.geo.lat, longitude: SITE.geo.lng },
+  areaServed: { '@type': 'City', name: SITE.town },
+  sameAs: [SITE.facebook, SITE.googlePlay, SITE.appStore],
+  parentOrganization: {
+    '@type': 'NGO',
+    name: 'South Lincolnshire Blind Society',
+    url: SITE.blindSociety,
+  },
+  potentialAction: {
+    '@type': 'ListenAction',
+    target: { '@type': 'EntryPoint', urlTemplate: SITE.url, actionPlatform: 'https://schema.org/DesktopWebPlatform' },
+  },
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
     default: `${SITE.name} | Bringing Grantham Together`,
     template: `%s | ${SITE.name}`,
   },
-  description:
-    'Hive FM 97.2 is Grantham\'s community radio station, broadcasting from the BHive. Listen live, browse the schedule, meet our presenters and catch up on shows.',
+  description: DESCRIPTION,
   generator: 'v0.app',
+  openGraph: {
+    type: 'website',
+    locale: 'en_GB',
+    siteName: SITE.name,
+    title: `${SITE.name} | Bringing Grantham Together`,
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${SITE.name} | Bringing Grantham Together`,
+    description: DESCRIPTION,
+  },
   icons: {
     icon: [
       { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
@@ -48,6 +96,10 @@ export default function RootLayout({
   return (
     <html lang="en-GB" className={`${montserrat.variable} ${poppins.variable} bg-background`}>
       <body className="antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(radioStationJsonLd) }}
+        />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-primary focus:px-6 focus:py-3 focus:font-semibold focus:text-primary-foreground"

@@ -57,7 +57,7 @@ export function ScheduleView({ slots }: { slots: ScheduleSlot[] }) {
                 onAir ? 'border-primary bg-secondary' : 'bg-card',
               )}
             >
-              <SafeImage src={slot.image} alt="" className="size-16 shrink-0 rounded-xl bg-muted object-contain" />
+              <SafeImage src={slot.image} alt="" className="size-16 shrink-0 rounded-xl bg-foreground object-contain p-1 ring-1 ring-primary/30 sm:size-20" />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-muted-foreground">
                   {formatSlotRange(slot.start, slot.end)}
