@@ -2,7 +2,8 @@ export const SITE = {
   name: '97.2 Hive FM',
   shortName: 'Hive FM',
   tagline: 'Hive FM – Bringing Grantham Together',
-  url: 'https://hivefm.org',
+  /** Follows the Vercel project's production domain, so it switches to hivefm.org once that domain is added */
+  url: `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || 'hivefm.vercel.app'}`,
   frequency: '97.2 FM',
   charityNumber: '1182486',
   venue: 'BHive Community Centre',
