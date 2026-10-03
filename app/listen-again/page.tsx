@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Headphones } from 'lucide-react'
+import { ListenAgainLink } from '@/components/player/listen-again-link'
 import { PageHeader } from '@/components/shared/page-header'
 import { SafeImage } from '@/components/shared/safe-image'
 import { getPresenters, onDemandSlug } from '@/lib/presenters'
@@ -24,10 +25,9 @@ export default async function ListenAgainPage() {
       <ul className="mx-auto grid max-w-5xl gap-4 px-4 py-12 sm:grid-cols-2 sm:px-6">
         {presenters.map((presenter) => (
           <li key={presenter.slug}>
-            <a
-              href={`${SITE.onDemandBase}${onDemandSlug(presenter)}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <ListenAgainLink
+              title={presenter.showTitle!}
+              url={`${SITE.onDemandBase}${onDemandSlug(presenter)}`}
               className="flex min-h-24 items-center gap-4 rounded-2xl border bg-card p-3 hover:border-foreground"
             >
               <SafeImage
@@ -42,8 +42,7 @@ export default async function ListenAgainPage() {
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
                 <Headphones className="size-5" aria-hidden="true" />
               </span>
-              <span className="sr-only">(opens in a new tab)</span>
-            </a>
+            </ListenAgainLink>
           </li>
         ))}
       </ul>

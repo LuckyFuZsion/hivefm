@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Menu, X } from 'lucide-react'
 import { ListenLiveButton } from '@/components/player/listen-live-button'
 import { NAV_LINKS, SITE } from '@/lib/site'
@@ -78,8 +79,8 @@ export function Header() {
         </div>
       </div>
 
-      {open && (
-        <div className="fixed inset-0 z-50 xl:hidden">
+      {open && createPortal(
+        <div className="fixed inset-0 z-[60] xl:hidden">
           <button
             type="button"
             tabIndex={-1}
@@ -126,7 +127,8 @@ export function Header() {
             </nav>
             <ListenLiveButton size="large" className="mt-4 w-full" />
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </header>
   )

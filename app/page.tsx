@@ -18,7 +18,8 @@ export default async function HomePage() {
       <section className="on-dark honeycomb bg-foreground text-background">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
           <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-            <div className="order-2 lg:order-1">
+            <div className="relative order-2 overflow-hidden rounded-3xl border border-primary/25 bg-black/60 p-6 shadow-2xl shadow-black/50 backdrop-blur-sm sm:p-8 lg:order-1 lg:p-10">
+              <span aria-hidden="true" className="absolute inset-y-6 left-0 w-1.5 rounded-r-full bg-primary sm:inset-y-8 lg:inset-y-10" />
               <p className="text-sm font-bold uppercase tracking-widest text-primary">
                 {SITE.frequency} · {SITE.town}, {SITE.county}
               </p>

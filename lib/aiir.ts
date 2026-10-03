@@ -84,6 +84,17 @@ export class AiirNowPlayingClient {
     this.socket = null
   }
 
+  /** Drops the current socket and resubscribes, which makes the feed send a fresh snapshot. */
+  refresh(): void {
+    if (this.closedByUser) return
+    this.clearTimers()
+    this.attempts = 0
+    const previous = this.socket
+    this.socket = null
+    previous?.close()
+    this.open()
+  }
+
   private open(): void {
     this.options.onStatus?.('connecting')
     let socket: WebSocket
@@ -96,6 +107,7 @@ export class AiirNowPlayingClient {
     this.socket = socket
 
     socket.addEventListener('open', () => {
+      if (this.socket !== socket) return
       this.attempts = 0
       this.options.onStatus?.('open')
       this.send({ action: 'subscribe', serviceId: this.serviceId })
@@ -103,6 +115,7 @@ export class AiirNowPlayingClient {
     })
 
     socket.addEventListener('message', (event) => {
+      if (this.socket !== socket) return
       try {
         const data: unknown = JSON.parse(String(event.data))
         if (!isNowPlayingMessage(data)) return
@@ -114,6 +127,7 @@ export class AiirNowPlayingClient {
     })
 
     socket.addEventListener('close', () => {
+      if (this.socket !== socket) return
       this.clearTimers()
       this.options.onStatus?.('closed')
       if (!this.closedByUser) this.scheduleReconnect()

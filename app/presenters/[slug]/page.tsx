@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Headphones } from 'lucide-react'
+import { ListenAgainLink } from '@/components/player/listen-again-link'
 import { PresenterAvatar } from '@/components/presenters/presenter-avatar'
 import { getPresenter, onDemandSlug, presenters } from '@/lib/presenters'
 import { SITE } from '@/lib/site'
@@ -45,16 +46,14 @@ export default async function PresenterPage({ params }: PageProps) {
             ))}
           </div>
           {onDemandSlug(presenter) && (
-            <a
-              href={`${SITE.onDemandBase}${onDemandSlug(presenter)}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <ListenAgainLink
+              title={presenter.showTitle ?? presenter.name}
+              url={`${SITE.onDemandBase}${onDemandSlug(presenter)}`}
               className={linkButton('default', 'mt-8')}
             >
               <Headphones className="size-5" aria-hidden="true" />
               Listen again
-              <span className="sr-only"> (opens in a new tab)</span>
-            </a>
+            </ListenAgainLink>
           )}
         </div>
       </div>

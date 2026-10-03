@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Montserrat, Poppins } from 'next/font/google'
 import { NowPlayingProvider } from '@/components/now-playing/now-playing-provider'
+import { OnDemandPanel } from '@/components/player/on-demand-panel'
 import { PlayerBar } from '@/components/player/player-bar'
 import { PlayerProvider } from '@/components/player/player-provider'
 import { Footer } from '@/components/site/footer'
@@ -62,6 +63,7 @@ export default function RootLayout({
             <div className="pb-24">
               <Footer />
             </div>
+            <OnDemandPanel />
             <PlayerBar />
           </PlayerProvider>
         </NowPlayingProvider>

@@ -61,6 +61,8 @@
   }
   html {
     scroll-behavior: smooth;
+    /* Sticky header is h-20 plus a 1px border; keep in sync with components/site/header.tsx */
+    scroll-padding-top: calc(5rem + 1px + 1rem);
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;

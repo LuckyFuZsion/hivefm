@@ -14,6 +14,11 @@ import { STREAM } from '@/lib/site'
 
 export type PlayerStatus = 'idle' | 'loading' | 'playing' | 'error'
 
+export interface OnDemandShow {
+  title: string
+  url: string
+}
+
 interface PlayerValue {
   status: PlayerStatus
   volume: number
@@ -23,7 +28,12 @@ interface PlayerValue {
   toggle: () => void
   setVolume: (value: number) => void
   toggleMute: () => void
+  onDemand: OnDemandShow | null
+  openOnDemand: (show: OnDemandShow) => void
+  closeOnDemand: () => void
 }
+
+const CHANNEL_NAME = 'hive-fm-player'
 
 const PlayerContext = createContext<PlayerValue | null>(null)
 
@@ -37,6 +47,11 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<PlayerStatus>('idle')
   const [volume, setVolumeState] = useState(0.8)
   const [muted, setMuted] = useState(false)
+  const [onDemand, setOnDemand] = useState<OnDemandShow | null>(null)
+  const channelRef = useRef<BroadcastChannel | null>(null)
+
+  // Tells other open Hive FM tabs to go quiet so only one tab plays at a time
+  const announcePlayback = useCallback(() => channelRef.current?.postMessage('playing'), [])
 
   const teardownHls = useCallback(() => {
     hlsRef.current?.destroy()
@@ -88,6 +103,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     const attempt = ++attemptRef.current
     wantPlayingRef.current = true
     usingHlsRef.current = false
+    setOnDemand(null)
+    announcePlayback()
     teardownHls()
     setStatus('loading')
     audio.src = STREAM.mp3
@@ -99,7 +116,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       audio.removeAttribute('src')
       await startHls(attempt)
     }
-  }, [startHls, teardownHls])
+  }, [announcePlayback, startHls, teardownHls])
 
   const stop = useCallback(() => {
     const audio = audioRef.current
@@ -119,6 +136,31 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     if (wantPlayingRef.current) stop()
     else void play()
   }, [play, stop])
+
+  const openOnDemand = useCallback(
+    (show: OnDemandShow) => {
+      stop()
+      setOnDemand(show)
+      announcePlayback()
+    },
+    [announcePlayback, stop],
+  )
+
+  const closeOnDemand = useCallback(() => setOnDemand(null), [])
+
+  useEffect(() => {
+    if (typeof BroadcastChannel === 'undefined') return
+    const channel = new BroadcastChannel(CHANNEL_NAME)
+    channelRef.current = channel
+    channel.onmessage = () => {
+      if (wantPlayingRef.current) stop()
+      setOnDemand(null)
+    }
+    return () => {
+      channel.close()
+      channelRef.current = null
+    }
+  }, [stop])
 
   const setVolume = useCallback((value: number) => {
     setVolumeState(value)
@@ -143,8 +185,20 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => () => teardownHls(), [teardownHls])
 
   const value = useMemo<PlayerValue>(
-    () => ({ status, volume, muted, play, stop, toggle, setVolume, toggleMute }),
-    [status, volume, muted, play, stop, toggle, setVolume, toggleMute],
+    () => ({
+      status,
+      volume,
+      muted,
+      play,
+      stop,
+      toggle,
+      setVolume,
+      toggleMute,
+      onDemand,
+      openOnDemand,
+      closeOnDemand,
+    }),
+    [status, volume, muted, play, stop, toggle, setVolume, toggleMute, onDemand, openOnDemand, closeOnDemand],
   )
 
   return (
