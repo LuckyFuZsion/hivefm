@@ -46,6 +46,19 @@ export default async function ListenAgainPage() {
           </li>
         ))}
       </ul>
+      <p className="mx-auto max-w-5xl px-4 pb-12 sm:px-6">
+        Having trouble? You can also find every show on{' '}
+        <a
+          href={SITE.aiirOnDemand}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold underline underline-offset-4"
+        >
+          Hive FM&apos;s Listen Again site
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
+        .
+      </p>
     </>
   )
 }

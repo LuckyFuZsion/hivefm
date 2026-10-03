@@ -1,10 +1,12 @@
 'use client'
 
-import { Loader2, Music2, Play, Square, Volume2, VolumeX } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ExternalLink, Loader2, Music2, Play, Square, Volume2, VolumeX } from 'lucide-react'
 import { useNowPlaying } from '@/components/now-playing/now-playing-provider'
 import { usePlayer } from '@/components/player/player-provider'
 import { useMediaSession } from '@/components/player/use-media-session'
 import { SafeImage } from '@/components/shared/safe-image'
+import { SITE } from '@/lib/site'
 import { formatShowRange } from '@/lib/time'
 
 const STATUS_TEXT = {
@@ -19,6 +21,18 @@ export function PlayerBar() {
   const { status, volume, muted, toggle, setVolume, toggleMute } = usePlayer()
   useMediaSession()
 
+  // If "connecting" drags on, treat it like a failure and offer the Aiir player.
+  const [stalled, setStalled] = useState(false)
+  useEffect(() => {
+    if (status !== 'loading') {
+      setStalled(false)
+      return
+    }
+    const t = setTimeout(() => setStalled(true), 10_000)
+    return () => clearTimeout(t)
+  }, [status])
+  const showFallback = status === 'error' || stalled
+
   const programme = data?.nowProgramme
   const track = data?.nowPlaying
   const isActive = status === 'playing' || status === 'loading'
@@ -32,6 +46,8 @@ export function PlayerBar() {
     >
       <p className="sr-only" role="status" aria-live="polite">
         {STATUS_TEXT[status]}
+        {showFallback && status !== 'error' && " This is taking longer than usual. You can listen on the main Hive FM player instead."}
+        {showFallback && status === 'error' && ' You can listen on the main Hive FM player instead.'}
       </p>
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-3 py-3 sm:gap-5 sm:px-6">
         <button
@@ -100,6 +116,21 @@ export function PlayerBar() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
+          {showFallback && (
+            <a
+              href={SITE.aiirPlayer}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center gap-2 rounded-full border-2 border-background px-4 text-sm font-semibold hover:bg-background hover:text-foreground focus-visible:outline-primary"
+            >
+              <ExternalLink className="size-4 shrink-0" aria-hidden="true" />
+              <span>
+                Can&apos;t play here?<span className="hidden sm:inline"> Listen on Hive FM&apos;s main player</span>
+                <span className="sr-only sm:hidden"> Listen on Hive FM&apos;s main player</span>
+                <span className="sr-only"> (opens in a new tab)</span>
+              </span>
+            </a>
+          )}
           <button
             type="button"
             onClick={toggleMute}

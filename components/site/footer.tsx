@@ -67,7 +67,18 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="font-heading text-lg font-bold text-primary">Follow and download</h2>
+          <h2 className="font-heading text-lg font-bold text-primary">Other ways to listen</h2>
+          <p className="mt-2 text-sm opacity-90">Our player not working for you? Try these.</p>
+          <a
+            href={SITE.aiirPlayer}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-xl border-2 border-background px-4 font-semibold hover:bg-background hover:text-foreground"
+          >
+            Hive FM web player
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          <h2 className="mt-8 font-heading text-lg font-bold text-primary">Follow and download</h2>
           <a
             href={SITE.facebook}
             target="_blank"

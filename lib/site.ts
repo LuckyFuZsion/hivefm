@@ -24,6 +24,9 @@ export const SITE = {
   logo: '/hive-fm-logo.png',
   /** Square bee badge for small spaces where the full logo would be too small to read */
   badge: '/images/hive-fm-badge.png',
+  /** Hive FM's official Aiir web player, used as a fallback if our own player fails */
+  aiirPlayer: 'https://player.aiir.com/hive-fm/',
+  aiirOnDemand: 'https://player.aiir.com/hive-fm/on-demand/',
   onDemandBase: 'https://player.aiir.com/hive-fm/on-demand/',
 } as const
 
