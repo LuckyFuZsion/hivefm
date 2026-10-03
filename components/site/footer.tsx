@@ -107,7 +107,18 @@ export function Footer() {
             © {new Date().getFullYear()} Hive FM, a project of South Lincolnshire Blind Society.
             Registered Charity No. {SITE.charityNumber}.
           </p>
-          <p>Website by WebFuZsion</p>
+          <p>
+            Website by{' '}
+            <a
+              href="https://webfuzsion.co.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:text-primary"
+            >
+              WebFuZsion
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </p>
         </div>
       </div>
     </footer>
