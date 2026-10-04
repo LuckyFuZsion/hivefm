@@ -44,8 +44,8 @@ export function OnDemandPanel() {
       className={cn(
         'on-dark fixed z-[60] flex flex-col overflow-hidden bg-foreground text-background shadow-2xl',
         minimised
-          ? 'inset-x-4 bottom-[6.5rem] rounded-2xl border-4 border-primary sm:inset-x-auto sm:right-6 sm:bottom-28 sm:w-[28rem]'
-          : 'inset-0 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] sm:inset-auto sm:right-6 sm:bottom-28 sm:h-[min(70vh,36rem)] sm:w-[28rem] sm:rounded-2xl sm:border-4 sm:border-primary sm:p-0',
+          ? 'inset-x-4 bottom-[calc(92px+env(safe-area-inset-bottom))] rounded-2xl border-4 border-primary sm:inset-x-auto sm:right-6 sm:bottom-[100px] sm:w-[28rem]'
+          : 'inset-0 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] sm:inset-auto sm:right-6 sm:bottom-[100px] sm:h-[min(70vh,36rem)] sm:w-[28rem] sm:rounded-2xl sm:border-4 sm:border-primary sm:p-0',
       )}
     >
       <div className="flex items-center gap-3 px-4 py-3">

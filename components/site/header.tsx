@@ -125,7 +125,7 @@ export function Header() {
                 ))}
               </ul>
             </nav>
-            <ListenLiveButton size="large" className="mt-4 w-full" />
+            <ListenLiveButton size="large" className="mt-4 w-full" onPress={() => setOpen(false)} />
           </div>
         </div>,
         document.body,

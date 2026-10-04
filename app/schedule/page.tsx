@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   description: 'See what is on Hive FM 97.2 today and every day this week.',
 }
 
-/** Rebuild the page every 6 hours so it keeps following Aiir's live schedule. */
-export const revalidate = 21600
+/** Rebuild twice a day to follow Aiir's recordings feed; matches RECORDINGS_REVALIDATE_SECONDS. */
+export const revalidate = 43200
 
 export default async function SchedulePage() {
   const slots = await getSchedule()

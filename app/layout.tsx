@@ -1,7 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Montserrat, Poppins } from 'next/font/google'
-import { NowPlayingProvider } from '@/components/now-playing/now-playing-provider'
 import { OnDemandPanel } from '@/components/player/on-demand-panel'
 import { PlayerBar } from '@/components/player/player-bar'
 import { PlayerProvider } from '@/components/player/player-provider'
@@ -106,19 +105,17 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <NowPlayingProvider>
-          <PlayerProvider>
-            <Header />
-            <main id="main" className="min-h-[60vh]">
-              {children}
-            </main>
-            <div className="pb-24">
-              <Footer />
-            </div>
-            <OnDemandPanel />
-            <PlayerBar />
-          </PlayerProvider>
-        </NowPlayingProvider>
+        <PlayerProvider>
+          <Header />
+          <main id="main" className="min-h-[60vh]">
+            {children}
+          </main>
+          <div className="pb-[calc(76px+env(safe-area-inset-bottom))]">
+            <Footer />
+          </div>
+          <OnDemandPanel />
+          <PlayerBar />
+        </PlayerProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

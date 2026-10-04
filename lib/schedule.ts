@@ -32,7 +32,9 @@ const day = (d: DayIndex, rows: Row[]): ScheduleSlot[] =>
 
 /**
  * Snapshot of the real weekly rota, copied from Aiir's schedule for 3-9 Oct 2026.
- * Used as the fallback if the live schedule can't be fetched (see lib/schedule-live.ts).
+ * Aiir's recordings feed only lists recorded shows, so this supplies the automated slots
+ * (The Overnight Mix, the Wind Downs, Love From Tony) between them, and the whole day if
+ * the feed is down. Keep these slots up to date by hand (see lib/schedule-live.ts).
  * 0 = Monday ... 6 = Sunday.
  */
 export const schedule: ScheduleSlot[] = [

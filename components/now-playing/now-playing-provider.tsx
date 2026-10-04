@@ -25,7 +25,8 @@ const NowPlayingContext = createContext<NowPlayingValue>({
 })
 
 const FALLBACK_AFTER_MS = 6000
-const REFRESH_COOLDOWN_MS = 15_000
+/** Each refresh reconnects to Aiir's feed, which sits behind Cloudflare rate limits */
+const REFRESH_COOLDOWN_MS = 60_000
 const REFRESH_TIMEOUT_MS = 8000
 
 export function NowPlayingProvider({ children }: { children: React.ReactNode }) {

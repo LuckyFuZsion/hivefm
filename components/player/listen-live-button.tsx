@@ -1,37 +1,36 @@
 'use client'
 
-import { Loader2, Play, Square } from 'lucide-react'
+import { Play } from 'lucide-react'
 import { usePlayer } from '@/components/player/player-provider'
 import { cn } from '@/lib/utils'
 
 interface ListenLiveButtonProps {
   className?: string
   size?: 'default' | 'large'
+  /** Runs before pointing at the player, e.g. to close a menu that would cover it */
+  onPress?: () => void
 }
 
-export function ListenLiveButton({ className, size = 'default' }: ListenLiveButtonProps) {
-  const { status, toggle } = usePlayer()
-  const isActive = status === 'playing' || status === 'loading'
+/** The live player is Aiir's own play bar, so this points listeners to it rather than starting audio itself. */
+export function ListenLiveButton({ className, size = 'default', onPress }: ListenLiveButtonProps) {
+  const { promptLive } = usePlayer()
 
   return (
     <button
       type="button"
-      onClick={toggle}
-      aria-label={isActive ? 'Stop Hive FM live stream' : 'Listen live to Hive FM'}
+      onClick={() => {
+        onPress?.()
+        promptLive()
+      }}
+      aria-label="Listen live to Hive FM: go to the player at the bottom of the screen"
       className={cn(
         'inline-flex items-center justify-center gap-3 rounded-full bg-primary font-heading font-semibold text-primary-foreground transition-transform hover:scale-[1.03] focus-visible:outline-foreground',
         size === 'large' ? 'h-16 px-10 text-xl' : 'h-12 px-6 text-base',
         className,
       )}
     >
-      {status === 'loading' ? (
-        <Loader2 className="size-6 animate-spin" aria-hidden="true" />
-      ) : isActive ? (
-        <Square className="size-5 fill-current" aria-hidden="true" />
-      ) : (
-        <Play className="size-6 fill-current" aria-hidden="true" />
-      )}
-      {isActive ? 'Stop' : 'Listen Live'}
+      <Play className="size-6 fill-current" aria-hidden="true" />
+      Listen Live
     </button>
   )
 }
