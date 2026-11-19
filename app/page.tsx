@@ -71,20 +71,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {nextEvent && (
-        <section aria-labelledby="next-event-heading" className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 id="next-event-heading" className="text-2xl font-bold sm:text-3xl">
-              Next event
-            </h2>
-            <Link href="/events" className={linkButton('outline')}>
-              All events <ArrowRight className="size-5" aria-hidden="true" />
-            </Link>
-          </div>
-          <EventCard event={nextEvent} featured today={todayInLondon()} className="mt-6 border-2 border-primary" />
-        </section>
-      )}
-
       <RecentlyPlayed />
 
       <section aria-labelledby="presenters-heading" className="bg-muted">
@@ -102,6 +88,20 @@ export default async function HomePage() {
       </section>
 
       <TeamSection />
+
+      {nextEvent && (
+        <section aria-labelledby="next-event-heading" className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 id="next-event-heading" className="text-2xl font-bold sm:text-3xl">
+              Next event
+            </h2>
+            <Link href="/events" className={linkButton('outline')}>
+              All events <ArrowRight className="size-5" aria-hidden="true" />
+            </Link>
+          </div>
+          <EventCard event={nextEvent} featured today={todayInLondon()} className="mt-6 border-2 border-primary" />
+        </section>
+      )}
 
       <section aria-labelledby="more-heading" className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
         <h2 id="more-heading" className="sr-only">
