@@ -10,6 +10,6 @@ id = "69be8952feba40078ee03189ecc58816"
 
 [vars]
 # Comma-separated origins allowed to read /now-playing from a browser
-ALLOWED_ORIGINS = "https://hivefm.vercel.app,http://localhost:3000"
+ALLOWED_ORIGINS = "https://hivefm.org,https://www.hivefm.org,https://hivefm.vercel.app,http://localhost:3000"
 
 # PUSH_TOKEN is a secret: npx wrangler secret put PUSH_TOKEN

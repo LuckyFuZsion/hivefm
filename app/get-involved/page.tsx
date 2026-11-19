@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { Mail } from 'lucide-react'
 import { PageHeader } from '@/components/shared/page-header'
 import { SITE } from '@/lib/site'
@@ -10,10 +11,30 @@ export const metadata: Metadata = {
 }
 
 const roles = [
-  { title: 'Present a show', text: 'Share your music and your stories with the town. We will train you.' },
-  { title: 'Production and tech', text: 'Help with recording, editing and keeping the studio running.' },
-  { title: 'Community reporting', text: 'Bring local news, events and voices to the airwaves.' },
-  { title: 'Fundraising and events', text: 'Help us raise the funds that keep Hive FM on air.' },
+  {
+    title: 'Present a show',
+    text: 'Share your music and your stories with the town. We will train you.',
+    image: '/get-involved/present-a-show.webp',
+    alt: 'The Hive FM bee mascot presenting a show into a studio microphone.',
+  },
+  {
+    title: 'Production and tech',
+    text: 'Help with recording, editing and keeping the studio running.',
+    image: '/get-involved/production-and-tech.webp',
+    alt: 'The Hive FM bee mascot editing audio at a mixing desk and laptop.',
+  },
+  {
+    title: 'Community reporting',
+    text: 'Bring local news, events and voices to the airwaves.',
+    image: '/get-involved/community-reporting.webp',
+    alt: 'The Hive FM bee mascot interviewing a local resident on a market street.',
+  },
+  {
+    title: 'Fundraising and events',
+    text: 'Help us raise the funds that keep Hive FM on air.',
+    image: '/get-involved/fundraising-and-events.webp',
+    alt: 'The Hive FM bee mascot holding a collection bucket at a community event.',
+  },
 ]
 
 export default function GetInvolvedPage() {
@@ -23,9 +44,19 @@ export default function GetInvolvedPage() {
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
         <ul className="grid gap-5 sm:grid-cols-2">
           {roles.map((role) => (
-            <li key={role.title} className="rounded-3xl border bg-card p-6">
-              <h2 className="text-xl font-bold">{role.title}</h2>
-              <p className="mt-2 text-lg leading-relaxed text-muted-foreground">{role.text}</p>
+            <li key={role.title} className="overflow-hidden rounded-3xl border bg-card">
+              <Image
+                src={role.image}
+                alt={role.alt}
+                width={1200}
+                height={896}
+                sizes="(min-width: 1024px) 480px, (min-width: 640px) 45vw, 100vw"
+                className="aspect-[4/3] w-full object-cover"
+              />
+              <div className="p-6">
+                <h2 className="text-xl font-bold">{role.title}</h2>
+                <p className="mt-2 text-lg leading-relaxed text-muted-foreground">{role.text}</p>
+              </div>
             </li>
           ))}
         </ul>

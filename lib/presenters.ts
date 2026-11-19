@@ -1,3 +1,6 @@
+import { schedule, type ScheduleSlot } from '@/lib/schedule'
+import { toMinutes } from '@/lib/time'
+
 export interface Presenter {
   slug: string
   name: string
@@ -52,11 +55,11 @@ export const presenters: Presenter[] = [
   {
     slug: "willie-mac",
     name: "Willie Mac",
-    showName: "The Goldmine",
-    showTitle: "The Goldmine with Willie Mac",
-    slotLabel: "Weekdays 9am",
+    showName: "The Tartan Tonic",
+    showTitle: "The Tartan Tonic with Willie Mac",
+    slotLabel: "Tuesdays & Wednesdays 10am",
     shortBio: "I spun my first disc when I was 18 in a hotel in Scotland, and from that moment I was hooked.",
-    bio: ["I spun my first disc when I was 18 in a hotel in Scotland, and from that moment I was hooked. Nearly five decades later, music remains my passion. I love working in local radio and I’m proud to be on Grantham’s Hive FM, a community station that is local, vibrant and full of heart. Tune in every weekday morning from 9 as we dig into the Goldmine."],
+    bio: ["I spun my first disc when I was 18 in a hotel in Scotland, and from that moment I was hooked. Nearly five decades later, music remains my passion. I love working in local radio and I’m proud to be on Grantham’s Hive FM, a community station that is local, vibrant and full of heart. Tune in on Tuesday and Wednesday mornings at 10 for The Tartan Tonic."],
     image: "/presenters/willie-mac.webp",
   },
   {
@@ -305,8 +308,9 @@ export const presenters: Presenter[] = [
   {
     slug: "ady-crampton",
     name: "Ady Crampton",
-    showName: "The 70s Soul Show",
-    showTitle: "Ady Crampton with The 70's Soul Show",
+    showName: "Goldmine at Nine",
+    showTitle: "Goldmine at Nine with Ady Crampton",
+    slotLabel: "Weekdays 9am",
     onDemand: "ady-crampton-with-the-70s-soul-show",
     shortBio: "Listening to and playing music has always been a large part of my life.",
     bio: ["Listening to and playing music has always been a large part of my life. I bought my first vinyl in 1974 aged 7, by 1983 I was immersed in the UK scooter scene and began attending the rallies which boasted ex-Wigan Casino DJs on their all-nighter line-up. There was so much music that I hadn’t heard before and of course, as there was a record bar in each venue, my record collection increased although never as much as my wants list. I really get a kick out of sharing my passion for music and have enjoyed playing my 70s soul, funk and disco records to the world ever since."],
@@ -403,18 +407,63 @@ export function getPresenter(slug: string): Presenter | undefined {
   return presenters.find((p) => p.slug === slug)
 }
 
+/** A weekday slot counts as "regular" when the same presenter hosts it at the same time on this many weekdays. */
+const REGULAR_WEEKDAYS = 3
+
 /**
- * Lower rank shows first: daily weekday shows, then other regular weekly slots,
- * then shows with no fixed slot listed, then presenters with no show listed.
- * Sorting is stable, so ties keep the original hivefm.org order.
+ * Presenter slugs in order, each listed once:
+ *   1. Regular weekday hosts, by slot time: Harry at 6am through to Ian at 3pm
+ *      (a presenter who hosts the same weekday slot on at least REGULAR_WEEKDAYS of the 5 days)
+ *   2. Everyone else, by day (Monday to Sunday) then slot time, at their first appearance
+ * Uses the fixed weekly rota in lib/schedule.ts so the order doesn't shift week to week.
  */
-function showRank(presenter: Presenter): number {
-  if (!presenter.showName) return 3
-  if (!presenter.slotLabel) return 2
-  return presenter.slotLabel.startsWith('Weekdays') ? 0 : 1
+function scheduleOrder(): string[] {
+  const start = (s: ScheduleSlot) => toMinutes(s.start)
+  // "The Mid Morning Show" is a rotating stand-in slot (Paul Green on Monday, James Dale on Friday),
+  // not that presenter's own show, so it doesn't count as their first appearance.
+  const slots = schedule.filter((s) => s.presenterSlug && !/mid morning show/i.test(s.showName))
+
+  // Distinct weekdays each presenter hosts each start time
+  const weekdaysBySlot = new Map<string, Set<number>>()
+  for (const s of slots.filter((s) => s.day < 5)) {
+    const key = `${s.presenterSlug}|${s.start}`
+    weekdaysBySlot.set(key, (weekdaysBySlot.get(key) ?? new Set()).add(s.day))
+  }
+  const regular = new Map<string, number>() // slug -> earliest regular slot start
+  for (const [key, days] of weekdaysBySlot) {
+    if (days.size < REGULAR_WEEKDAYS) continue
+    const [slug, time] = key.split('|')
+    regular.set(slug, Math.min(regular.get(slug) ?? Infinity, toMinutes(time)))
+  }
+  const regularOrder = [...regular.entries()].sort((a, b) => a[1] - b[1]).map(([slug]) => slug)
+
+  const order = new Set<string>(regularOrder)
+  const byDayThenTime = [...slots].sort((a, b) => a.day - b.day || start(a) - start(b))
+  for (const slot of byDayThenTime) order.add(slot.presenterSlug as string)
+  return [...order]
 }
 
-/** Swap for an API fetch later; callers already await it. */
+/** Where to slot presenters that scheduleOrder() can't place, relative to a presenter who is on the rota. */
+const PLACEMENT: Record<string, { slug: string; where: 'before' | 'after' }> = {
+  'marie-reid': { slug: 'paul-o-reilly', where: 'after' }, // co-hosts the Wednesday PM Show
+  'laura-towning': { slug: 'ian-smith', where: 'before' }, // Sundays 10am, before Ones at One (1pm)
+}
+
+/**
+ * Schedule order first (see scheduleOrder). Presenters who aren't on the weekly rota
+ * follow in their original hivefm.org order.
+ */
 export async function getPresenters(): Promise<Presenter[]> {
-  return [...presenters].sort((a, b) => showRank(a) - showRank(b))
+  const order = scheduleOrder()
+  // Presenters whose show isn't on the rota snapshot, placed by when their show airs.
+  for (const [slug, anchor] of Object.entries(PLACEMENT)) {
+    if (order.includes(slug)) continue
+    const at = order.indexOf(anchor.slug)
+    if (at !== -1) order.splice(anchor.where === 'before' ? at : at + 1, 0, slug)
+  }
+  const rank = (p: Presenter) => {
+    const i = order.indexOf(p.slug)
+    return i === -1 ? order.length : i
+  }
+  return [...presenters].sort((a, b) => rank(a) - rank(b))
 }

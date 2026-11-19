@@ -40,6 +40,7 @@ export const STREAM = {
 export const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/schedule', label: 'Schedule' },
+  { href: '/events', label: 'Events' },
   { href: '/presenters', label: 'Presenters' },
   { href: '/listen-again', label: 'Listen Again' },
   { href: '/advertise', label: 'Advertise' },

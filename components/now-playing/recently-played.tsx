@@ -18,7 +18,7 @@ export function RecentlyPlayed() {
         {tracks.map((track) => (
           <li
             key={`${track.startedAt}-${track.title}`}
-            className="flex items-center gap-3 rounded-2xl border bg-card p-3 lg:flex-col lg:items-start"
+            className="flex min-w-0 items-center gap-3 rounded-2xl border bg-card p-3 lg:flex-col lg:items-stretch"
           >
             <SafeImage
               src={track.artwork || SITE.badge}

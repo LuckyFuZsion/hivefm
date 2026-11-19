@@ -31,7 +31,7 @@ const day = (d: DayIndex, rows: Row[]): ScheduleSlot[] =>
   }))
 
 /**
- * Snapshot of the real weekly rota, copied from Aiir's schedule for 3-9 Oct 2026.
+ * Snapshot of the real weekly rota, copied from Aiir's schedule (re-checked for 19-25 Nov 2026).
  * Aiir's recordings feed only lists recorded shows, so this supplies the automated slots
  * (The Overnight Mix, the Wind Downs, Love From Tony) between them, and the whole day if
  * the feed is down. Keep these slots up to date by hand (see lib/schedule-live.ts).
@@ -42,7 +42,7 @@ export const schedule: ScheduleSlot[] = [
   ...day(0, [
     ["00:00", "The Overnight Mix"],
     ["06:00", "Early Risers With Harry Chapman", "harry-chapman"],
-    ["07:00", "James Dale at Breakfast", "james-dale"],
+    ["07:00", "Rise & Shine with Suzie Sparkles", "suzie-sparkles"],
     ["09:00", "Goldmine at Nine with Ady Crampton", "ady-crampton"],
     ["10:00", "The Mid Morning Show with Paul Green", "paul-green"],
     ["12:00", "The Lunch Hive with Guy Jogoo", "guy-jogoo"],
@@ -68,7 +68,7 @@ export const schedule: ScheduleSlot[] = [
   ...day(2, [
     ["00:00", "The Overnight Mix"],
     ["06:00", "Early Risers With Harry Chapman", "harry-chapman"],
-    ["07:00", "James Dale at Breakfast", "james-dale"],
+    ["07:00", "Rise & Shine with Suzie Sparkles", "suzie-sparkles"],
     ["09:00", "Goldmine at Nine with Ady Crampton", "ady-crampton"],
     ["10:00", "The Tartan Tonic With Willie Mac", "willie-mac"],
     ["12:00", "The Lunch Hive with Guy Jogoo", "guy-jogoo"],
@@ -119,7 +119,7 @@ export const schedule: ScheduleSlot[] = [
   ...day(6, [
     ["00:00", "The Overnight Mix"],
     ["06:00", "James Dale at Breakfast", "james-dale"],
-    ["10:00", "The Sunday Special with Harry Chapman", "harry-chapman"],
+    ["10:00", "Laura’s Sunday Special", "laura-towning"],
     ["13:00", "Ian Smith With One's at One", "ian-smith"],
     ["14:00", "The Sunday Jukebox With Mark Roberts", "mark-roberts"],
     ["17:00", "Rock Of Ages: The Radio Show With Steve Healey", "steve-healey"],

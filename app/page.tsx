@@ -2,10 +2,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Megaphone, Mic2, Smartphone } from 'lucide-react'
 import { OnAirCard } from '@/components/now-playing/on-air-card'
+import { EventCard } from '@/components/events/event-card'
 import { RecentlyPlayed } from '@/components/now-playing/recently-played'
 import { ListenLiveButton } from '@/components/player/listen-live-button'
 import { PresenterGrid } from '@/components/presenters/presenter-grid'
 import { TeamSection } from '@/components/presenters/team-section'
+import { getUpcomingEvents, todayInLondon } from '@/lib/events'
 import { getPresenters } from '@/lib/presenters'
 import { getSchedule } from '@/lib/schedule-live'
 import { SITE } from '@/lib/site'
@@ -15,7 +17,12 @@ import { linkButton } from '@/lib/ui'
 export const revalidate = 43200
 
 export default async function HomePage() {
-  const [presenters, slots] = await Promise.all([getPresenters(), getSchedule()])
+  const [presenters, slots, events] = await Promise.all([
+    getPresenters(),
+    getSchedule(),
+    getUpcomingEvents(),
+  ])
+  const nextEvent = events?.[0]
 
   return (
     <>
@@ -63,6 +70,20 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {nextEvent && (
+        <section aria-labelledby="next-event-heading" className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 id="next-event-heading" className="text-2xl font-bold sm:text-3xl">
+              Next event
+            </h2>
+            <Link href="/events" className={linkButton('outline')}>
+              All events <ArrowRight className="size-5" aria-hidden="true" />
+            </Link>
+          </div>
+          <EventCard event={nextEvent} featured today={todayInLondon()} className="mt-6 border-2 border-primary" />
+        </section>
+      )}
 
       <RecentlyPlayed />
 
