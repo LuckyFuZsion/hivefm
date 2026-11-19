@@ -7,11 +7,15 @@ import { ListenLiveButton } from '@/components/player/listen-live-button'
 import { PresenterGrid } from '@/components/presenters/presenter-grid'
 import { TeamSection } from '@/components/presenters/team-section'
 import { getPresenters } from '@/lib/presenters'
+import { getSchedule } from '@/lib/schedule-live'
 import { SITE } from '@/lib/site'
 import { linkButton } from '@/lib/ui'
 
+/** Matches RECORDINGS_REVALIDATE_SECONDS in lib/recordings.ts */
+export const revalidate = 43200
+
 export default async function HomePage() {
-  const presenters = await getPresenters()
+  const [presenters, slots] = await Promise.all([getPresenters(), getSchedule()])
 
   return (
     <>
@@ -55,7 +59,7 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="mt-12 lg:mt-16">
-            <OnAirCard />
+            <OnAirCard slots={slots} />
           </div>
         </div>
       </section>

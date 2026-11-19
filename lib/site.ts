@@ -34,7 +34,6 @@ export const SITE = {
 export const STREAM = {
   /** Aiir's official embeddable play bar; keeps pre-rolls and campaigns under Aiir's control */
   embedPlayer: 'https://player.aiir.com/hive-fm/?variant=small_embed',
-  socket: 'wss://metadata.aiir.net/now-playing',
   serviceId: '5725',
 } as const
 

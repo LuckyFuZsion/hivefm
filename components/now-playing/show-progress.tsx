@@ -1,14 +1,18 @@
 'use client'
 
+import { toMinutes } from '@/lib/time'
+import { londonNow } from '@/lib/time'
 import { useNow } from '@/lib/use-now'
 
+/** Progress through a show, from its start and end as HH:MM UK times. */
 export function ShowProgress({ start, end }: { start: string; end: string }) {
-  const now = useNow(15_000)
+  const now = useNow(30_000)
   if (!now) return <div className="h-2 rounded-full bg-border" aria-hidden="true" />
 
-  const s = new Date(start).getTime()
-  const e = new Date(end).getTime()
-  const pct = e > s ? Math.min(100, Math.max(0, ((now.getTime() - s) / (e - s)) * 100)) : 0
+  const s = toMinutes(start)
+  const e = toMinutes(end)
+  const m = londonNow(now).minutes
+  const pct = e > s ? Math.min(100, Math.max(0, ((m - s) / (e - s)) * 100)) : 0
 
   return (
     <div

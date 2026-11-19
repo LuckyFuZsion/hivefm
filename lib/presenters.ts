@@ -377,6 +377,7 @@ export const presenters: Presenter[] = [
     showTitle: 'The Buzz with Alastair Hawken',
     slotLabel: 'Saturdays 2pm',
     onDemand: 'the-buzz-with-alastair-hawken',
+    image: '/presenters/alastair-hawken.webp',
     shortBio: 'Presenter of The Buzz on Hive FM.',
     bio: ['A full biography is coming soon.'],
   },
