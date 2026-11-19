@@ -214,9 +214,9 @@ export const presenters: Presenter[] = [
   {
     slug: "andy-antony",
     name: "Andy Antony",
-    showName: "Tunes at Ten",
+    showName: "Tunes at Ten & Monday Night Jazz",
     showTitle: "Tunes at Ten with Andy Antony",
-    slotLabel: "Saturdays 10am",
+    slotLabel: "Saturdays 10am · Mondays 8pm",
     shortBio: "I'm from London and have resided in Grantham since 2017.",
     bio: ["I'm from London and have resided in Grantham since 2017. I’m a member of the St Peter’s Hill Dramatic Society as well as other amazing local groups. I enjoy writing, being in and directing shows that we put on in our wonderful Guildhall. Also I have been a DJ at Hive FM since it began and love meeting Grantham’s people, and going through their memories, and top songs on my Saturday show ‘Tunes at Ten’. I’ve also got a show that covers the Jazz genre on Monday nights 8-10pm. There’s such a vast and varied collection of music here at Hive FM and I love being part of this family."],
     image: "/presenters/andy-antony.webp",
